@@ -105,24 +105,9 @@
 
 
             <div class="space-y-6 hidden md:block">
-                <div>
-                    <h3 class="font-mono text-[10px] text-muted uppercase tracking-widest mb-3">Brief Complexity</h3>
-                    <div class="flex gap-2" id="filter-buttons">
-                        <button class="flex-1 sharp-border py-2 text-xs font-mono bg-ink text-base hover:bg-accent transition-colors" data-filter="all">All</button>
-                        <button class="flex-1 sharp-border py-2 text-xs font-mono bg-base hover:bg-ink hover:text-base transition-colors" data-filter="uiux">UI/UX</button>
-                        <button class="flex-1 sharp-border py-2 text-xs font-mono bg-base hover:bg-ink hover:text-base transition-colors" data-filter="brand">Brand</button>
-                    </div>
-                </div>
-
-                <div class="pt-4 border-t border-ink/20">
-                    <h3 class="font-mono text-[10px] text-muted uppercase tracking-widest mb-3">Output Format</h3>
-                    <label class="flex items-center gap-3 cursor-pointer group">
-                        <div class="w-4 h-4 sharp-border bg-ink group-hover:bg-accent transition-colors flex items-center justify-center">
-                            <i class="ph-bold ph-check text-base text-[10px]"></i>
-                        </div>
-                        <span class="font-mono text-xs uppercase">Shareable Card</span>
-                    </label>
-                </div>
+                <p class="font-sans text-sm leading-relaxed text-ink/70">
+                    A randomized design brief generator. Hit Generate for a new client, product, target user, constraint, and time limit to practice against.
+                </p>
             </div>
         </div>
 
@@ -146,13 +131,8 @@
             <div id="active-card" class="w-full max-w-[800px] bg-base sharp-border shadow-brutal p-8 md:p-12 relative group transition-transform duration-500">
 
 
-                <div class="flex justify-between items-start mb-12 lg:mb-20">
-                    <div>
-                        <p class="font-mono text-[10px] text-muted uppercase tracking-widest mb-1">Sequence</p>
-                        <p class="font-mono text-sm font-bold" id="brief-id">#0000</p>
-                    </div>
-
-                    <button id="share-btn" class="w-10 h-10 sharp-border flex items-center justify-center hover:bg-ink hover:text-base transition-colors" title="Copy to clipboard">
+                <div class="flex justify-end items-start mb-12 lg:mb-20">
+                    <button id="share-btn" class="w-10 h-10 sharp-border flex items-center justify-center hover:bg-ink hover:text-base transition-colors" title="Copy brief to clipboard">
                         <i class="ph ph-copy text-lg"></i>
                     </button>
                 </div>
@@ -173,7 +153,7 @@
                     <div>
                         <p class="font-mono text-[10px] text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
                             <span class="w-1 h-1 bg-ink rounded-full block"></span>
-                            Product Request
+                            Deliverable
                         </p>
                         <h3 class="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] text-ink uppercase scramble-text" id="data-product">Awaiting Input</h3>
                     </div>
@@ -187,7 +167,7 @@
                         </div>
 
                         <div>
-                            <p class="font-mono text-[10px] text-muted uppercase tracking-widest mb-2">Key Constraint</p>
+                            <p class="font-mono text-[10px] text-muted uppercase tracking-widest mb-2">Constraint</p>
                             <p class="font-sans text-lg font-medium leading-tight text-accent scramble-text" id="data-constraint">...</p>
                         </div>
 
@@ -259,8 +239,7 @@
                     <span class="font-bold text-sm tracking-tighter uppercase">Iterate App</span>
                 </div>
                 <div class="flex gap-6 font-mono text-[10px] uppercase tracking-widest text-muted">
-                    <a href="#" id="practice-mode-link" class="hover:text-ink transition-colors">Practice Mode</a>
-                    <a href="#" id="guidelines-link" class="hover:text-ink transition-colors">Guidelines</a>
+                    <a href="#" id="guidelines-link" class="hover:text-ink transition-colors">How to Use</a>
                 </div>
             </div>
         </footer>
@@ -281,18 +260,14 @@
                 <ul class="space-y-4 text-sm font-sans leading-relaxed">
                     <li class="flex gap-3">
                         <span class="font-mono text-accent font-bold shrink-0">01</span>
-                        <span>Click Generate or press Spacebar to receive a randomized design brief with a client, product, constraint, and time limit.</span>
+                        <span>Click Generate or press Spacebar to receive a randomized design brief with a client, deliverable, target user, constraint, and time limit.</span>
                     </li>
                     <li class="flex gap-3">
                         <span class="font-mono text-accent font-bold shrink-0">02</span>
-                        <span>Use the filter buttons (All, UI/UX, Brand) to narrow briefs to a specific discipline.</span>
+                        <span>Press C or click the copy icon to copy your current brief as formatted text.</span>
                     </li>
                     <li class="flex gap-3">
                         <span class="font-mono text-accent font-bold shrink-0">03</span>
-                        <span>Press C or click the copy icon to share your current brief as formatted text.</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="font-mono text-accent font-bold shrink-0">04</span>
                         <span>All previous briefs are saved in the Session Archive below. Use the search bar to find past prompts.</span>
                     </li>
                 </ul>
@@ -313,30 +288,30 @@
                 "Birch Insurance", "Tidal Analytics", "Ember Learning", "Crux Biotech"
             ],
             products: [
-                { label: "Mobile Onboarding Flow", category: "uiux" },
-                { label: "Analytics Dashboard", category: "uiux" },
-                { label: "Checkout Experience", category: "uiux" },
-                { label: "User Settings Panel", category: "uiux" },
-                { label: "Marketing Landing Page", category: "brand" },
-                { label: "Design System Components", category: "uiux" },
-                { label: "Data Visualization Widget", category: "uiux" },
-                { label: "Creator Profile Page", category: "uiux" },
-                { label: "Subscription Pricing Tier", category: "brand" },
-                { label: "Interactive Map Interface", category: "uiux" },
-                { label: "Messaging Chat View", category: "uiux" },
-                { label: "File Upload Modal", category: "uiux" },
-                { label: "Notification Center", category: "uiux" },
-                { label: "Empty State Design", category: "uiux" },
-                { label: "Error Page", category: "brand" },
-                { label: "Tooltip System", category: "uiux" },
-                { label: "Command Palette", category: "uiux" },
-                { label: "Permission Request Flow", category: "uiux" },
-                { label: "Paywall Screen", category: "brand" },
-                { label: "Search Results Page", category: "uiux" },
-                { label: "Data Export Modal", category: "uiux" },
-                { label: "Team Invitation Flow", category: "uiux" },
-                { label: "Progress Tracker", category: "uiux" },
-                { label: "In-App Announcement Banner", category: "brand" }
+                "Mobile Onboarding Flow",
+                "Analytics Dashboard",
+                "Checkout Experience",
+                "User Settings Panel",
+                "Marketing Landing Page",
+                "Design System Components",
+                "Data Visualization Widget",
+                "Creator Profile Page",
+                "Subscription Pricing Tier",
+                "Interactive Map Interface",
+                "Messaging Chat View",
+                "File Upload Modal",
+                "Notification Center",
+                "Empty State Design",
+                "Error Page",
+                "Tooltip System",
+                "Command Palette",
+                "Permission Request Flow",
+                "Paywall Screen",
+                "Search Results Page",
+                "Data Export Modal",
+                "Team Invitation Flow",
+                "Progress Tracker",
+                "In-App Announcement Banner"
             ],
             users: [
                 "Gen-Z Shoppers", "Enterprise Admins", "Freelance Creatives",
@@ -364,9 +339,6 @@
         };
 
         let currentBrief = null;
-        let briefCount = 0;
-        let activeFilter = 'all';
-        const history = [];
 
         // DOM Elements
         const els = {
@@ -375,7 +347,6 @@
             toast: document.getElementById('toast'),
             toastMessage: document.getElementById('toast-message'),
             card: document.getElementById('active-card'),
-            id: document.getElementById('brief-id'),
             client: document.getElementById('data-client'),
             product: document.getElementById('data-product'),
             user: document.getElementById('data-user'),
@@ -384,25 +355,13 @@
             historyGrid: document.getElementById('history-grid'),
             emptyState: document.getElementById('empty-state'),
             searchInput: document.getElementById('search-input'),
-            filterButtons: document.getElementById('filter-buttons'),
             guidelinesModal: document.getElementById('guidelines-modal'),
             guidelinesOverlay: document.getElementById('guidelines-overlay'),
             guidelinesClose: document.getElementById('guidelines-close'),
-            guidelinesLink: document.getElementById('guidelines-link'),
-            practiceModeLink: document.getElementById('practice-mode-link')
+            guidelinesLink: document.getElementById('guidelines-link')
         };
 
-        // Utility: Get random item from array
         const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-        // Utility: Format ID
-        const formatId = (num) => `#${String(num).padStart(4, '0')}`;
-
-        // Get filtered products based on active filter
-        const getFilteredProducts = () => {
-            if (activeFilter === 'all') return data.products;
-            return data.products.filter(p => p.category === activeFilter);
-        };
 
         // Scramble Text Effect Class
         class TextScramble {
@@ -471,57 +430,42 @@
         // Create History Card DOM string
         const createHistoryCard = (brief) => `
             <div class="history-card bg-white sharp-border p-6 shadow-brutal-sm hover:shadow-brutal hover:-translate-y-1 transition-all duration-200" data-client="${brief.client}" data-product="${brief.product}" data-constraint="${brief.constraint}">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="font-mono text-[10px] uppercase font-bold">${brief.id}</span>
+                <div class="flex justify-end items-center mb-4">
                     <span class="font-mono text-[10px] bg-base px-2 py-1 sharp-border">${brief.time}</span>
                 </div>
                 <h4 class="font-bold text-lg leading-tight uppercase tracking-tight mb-4 truncate" title="${brief.product}">${brief.product}</h4>
                 <div class="space-y-2 pt-4 border-t border-ink/10">
                     <p class="text-xs flex gap-2">
-                        <span class="font-mono text-[10px] text-muted w-16 uppercase">Client:</span>
+                        <span class="font-mono text-[10px] text-muted w-20 uppercase shrink-0">Client:</span>
                         <span class="truncate">${brief.client}</span>
                     </p>
                     <p class="text-xs flex gap-2">
-                        <span class="font-mono text-[10px] text-muted w-16 uppercase">Limit:</span>
+                        <span class="font-mono text-[10px] text-muted w-20 uppercase shrink-0">Constraint:</span>
                         <span class="text-accent truncate">${brief.constraint}</span>
                     </p>
                 </div>
             </div>
         `;
 
-        // Generate Logic
         const generateBrief = () => {
-            // Save current to history before generating new
             if (currentBrief) {
                 if(els.emptyState) els.emptyState.style.display = 'none';
                 els.historyGrid.insertAdjacentHTML('afterbegin', createHistoryCard(currentBrief));
             }
 
-            briefCount++;
-
-            // Get product from filtered pool
-            const filteredProducts = getFilteredProducts();
-            const selectedProduct = getRandom(filteredProducts);
-
-            // Build new data object
             currentBrief = {
-                idNum: briefCount,
-                id: formatId(briefCount),
                 client: getRandom(data.clients),
-                product: selectedProduct.label,
+                product: getRandom(data.products),
                 user: getRandom(data.users),
                 constraint: getRandom(data.constraints),
                 time: getRandom(data.times)
             };
 
-            // Animate Card Container slightly
             els.card.style.transform = 'scale(0.98) translateY(10px)';
             setTimeout(() => {
                 els.card.style.transform = 'scale(1) translateY(0)';
             }, 150);
 
-            // Update UI with Scramble
-            els.id.innerText = currentBrief.id;
             scramblers.client.setText(currentBrief.client);
             scramblers.product.setText(currentBrief.product);
             scramblers.user.setText(currentBrief.user);
@@ -555,9 +499,7 @@
         };
 
         const showToast = () => {
-            if (currentBrief) {
-                els.toastMessage.textContent = `Brief ${currentBrief.id} copied to clipboard`;
-            }
+            els.toastMessage.textContent = 'Brief copied to clipboard';
             els.toast.classList.remove('translate-y-20', 'opacity-0');
             setTimeout(() => {
                 els.toast.classList.add('translate-y-20', 'opacity-0');
@@ -569,11 +511,11 @@
             if(!currentBrief) return;
 
             const text = `
-ITERATE DESIGN BRIEF ${currentBrief.id}
+ITERATE DESIGN BRIEF
 --------------------------
 Client: ${currentBrief.client}
-Request: ${currentBrief.product}
-Target: ${currentBrief.user}
+Deliverable: ${currentBrief.product}
+Target User: ${currentBrief.user}
 Constraint: ${currentBrief.constraint}
 Time Limit: ${currentBrief.time}
 --------------------------
@@ -582,25 +524,6 @@ Generated via Iterate App
 
             copyToClipboard(text);
         };
-
-        // Filter button logic
-        els.filterButtons.addEventListener('click', (e) => {
-            const btn = e.target.closest('button[data-filter]');
-            if (!btn) return;
-
-            activeFilter = btn.dataset.filter;
-
-            // Update button styles
-            els.filterButtons.querySelectorAll('button').forEach(b => {
-                if (b === btn) {
-                    b.classList.add('bg-ink', 'text-base');
-                    b.classList.remove('bg-base');
-                } else {
-                    b.classList.remove('bg-ink', 'text-base');
-                    b.classList.add('bg-base');
-                }
-            });
-        });
 
         // Search archive logic
         els.searchInput.addEventListener('input', (e) => {
@@ -643,13 +566,6 @@ Generated via Iterate App
 
         els.guidelinesOverlay.addEventListener('click', () => {
             els.guidelinesModal.classList.add('hidden');
-        });
-
-        // Practice Mode link generates a new brief
-        els.practiceModeLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            generateBrief();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // Event Listeners
