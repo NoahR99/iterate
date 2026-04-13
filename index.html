@@ -122,10 +122,11 @@
     </aside>
 
 
-    <main class="flex-1 h-screen overflow-y-auto relative bg-[#F9F9F8]">
+    <main class="flex-1 h-screen flex flex-col relative bg-[#F9F9F8] overflow-hidden">
 
+      <div class="flex-1 overflow-y-auto">
 
-        <section class="min-h-[80vh] md:min-h-screen p-6 md:p-12 lg:p-20 flex items-center justify-center border-b border-ink">
+        <section class="min-h-[80vh] md:min-h-[calc(100vh-72px)] p-6 md:p-12 lg:p-20 flex items-center justify-center border-b border-ink">
 
 
             <div id="active-card" class="w-full max-w-[800px] bg-base sharp-border shadow-brutal p-8 md:p-12 relative group transition-transform duration-500">
@@ -215,22 +216,32 @@
                 </header>
 
 
-                <div id="history-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div id="history-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
 
+                <div id="empty-state" class="py-20 flex flex-col items-center justify-center text-center sharp-border border-dashed border-ink/30 bg-ink/5">
+                    <i class="ph-thin ph-archive text-4xl text-muted mb-4"></i>
+                    <p class="font-mono text-sm uppercase tracking-widest text-muted">Archive is empty</p>
+                    <p class="font-sans text-sm text-muted mt-2">Generate a new brief to populate your session history.</p>
+                </div>
 
-
-                    <div id="empty-state" class="col-span-full py-20 flex flex-col items-center justify-center text-center sharp-border border-dashed border-ink/30 bg-ink/5">
-                        <i class="ph-thin ph-archive text-4xl text-muted mb-4"></i>
-                        <p class="font-mono text-sm uppercase tracking-widest text-muted">Archive is empty</p>
-                        <p class="font-sans text-sm text-muted mt-2">Generate a new brief to populate your session history.</p>
-                    </div>
+                <div id="pagination" class="hidden mt-10 flex items-center justify-between gap-4 border-t border-ink pt-6">
+                    <button id="page-prev" class="sharp-border px-4 py-2 font-mono text-xs uppercase bg-base hover:bg-ink hover:text-base transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-base disabled:hover:text-ink flex items-center gap-2">
+                        <i class="ph-bold ph-arrow-left"></i>
+                        <span>Prev</span>
+                    </button>
+                    <span id="page-indicator" class="font-mono text-[10px] uppercase tracking-widest text-muted">Page 1 / 1</span>
+                    <button id="page-next" class="sharp-border px-4 py-2 font-mono text-xs uppercase bg-base hover:bg-ink hover:text-base transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-base disabled:hover:text-ink flex items-center gap-2">
+                        <span>Next</span>
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </button>
                 </div>
 
             </div>
         </section>
 
+      </div>
 
-        <footer class="border-t border-ink p-6 md:p-12 bg-base">
+        <footer class="border-t border-ink px-6 md:px-12 py-4 bg-base shrink-0">
             <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-2">
                     <div class="w-4 h-4 bg-ink flex items-center justify-center">
@@ -339,6 +350,10 @@
         };
 
         let currentBrief = null;
+        const history = [];
+        const PAGE_SIZE = 6;
+        let currentPage = 1;
+        let searchQuery = '';
 
         // DOM Elements
         const els = {
@@ -355,6 +370,10 @@
             historyGrid: document.getElementById('history-grid'),
             emptyState: document.getElementById('empty-state'),
             searchInput: document.getElementById('search-input'),
+            pagination: document.getElementById('pagination'),
+            pagePrev: document.getElementById('page-prev'),
+            pageNext: document.getElementById('page-next'),
+            pageIndicator: document.getElementById('page-indicator'),
             guidelinesModal: document.getElementById('guidelines-modal'),
             guidelinesOverlay: document.getElementById('guidelines-overlay'),
             guidelinesClose: document.getElementById('guidelines-close'),
@@ -447,10 +466,56 @@
             </div>
         `;
 
+        const getFilteredHistory = () => {
+            if (!searchQuery) return history;
+            const q = searchQuery.toLowerCase();
+            return history.filter(b =>
+                b.client.toLowerCase().includes(q) ||
+                b.product.toLowerCase().includes(q) ||
+                b.constraint.toLowerCase().includes(q)
+            );
+        };
+
+        const renderArchive = () => {
+            const filtered = getFilteredHistory();
+            const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            if (history.length === 0) {
+                els.historyGrid.innerHTML = '';
+                els.emptyState.style.display = '';
+                els.pagination.classList.add('hidden');
+                return;
+            }
+
+            els.emptyState.style.display = 'none';
+
+            if (filtered.length === 0) {
+                els.historyGrid.innerHTML = '<div class="col-span-full py-12 text-center font-mono text-xs uppercase tracking-widest text-muted">No matches found</div>';
+                els.pagination.classList.add('hidden');
+                return;
+            }
+
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const pageItems = filtered.slice(start, start + PAGE_SIZE);
+            els.historyGrid.innerHTML = pageItems.map(createHistoryCard).join('');
+
+            if (filtered.length > PAGE_SIZE) {
+                els.pagination.classList.remove('hidden');
+                els.pagination.classList.add('flex');
+                els.pageIndicator.textContent = `Page ${currentPage} / ${totalPages}`;
+                els.pagePrev.disabled = currentPage === 1;
+                els.pageNext.disabled = currentPage === totalPages;
+            } else {
+                els.pagination.classList.add('hidden');
+                els.pagination.classList.remove('flex');
+            }
+        };
+
         const generateBrief = () => {
             if (currentBrief) {
-                if(els.emptyState) els.emptyState.style.display = 'none';
-                els.historyGrid.insertAdjacentHTML('afterbegin', createHistoryCard(currentBrief));
+                history.unshift(currentBrief);
+                currentPage = 1;
             }
 
             currentBrief = {
@@ -465,6 +530,8 @@
             setTimeout(() => {
                 els.card.style.transform = 'scale(1) translateY(0)';
             }, 150);
+
+            renderArchive();
 
             scramblers.client.setText(currentBrief.client);
             scramblers.product.setText(currentBrief.product);
@@ -525,32 +592,24 @@ Generated via Iterate App
             copyToClipboard(text);
         };
 
-        // Search archive logic
         els.searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const cards = els.historyGrid.querySelectorAll('.history-card');
-            let visibleCount = 0;
+            searchQuery = e.target.value.trim();
+            currentPage = 1;
+            renderArchive();
+        });
 
-            cards.forEach(card => {
-                const client = (card.dataset.client || '').toLowerCase();
-                const product = (card.dataset.product || '').toLowerCase();
-                const constraint = (card.dataset.constraint || '').toLowerCase();
+        els.pagePrev.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderArchive();
+            }
+        });
 
-                if (!query || client.includes(query) || product.includes(query) || constraint.includes(query)) {
-                    card.style.display = '';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            // Show/hide empty state only when there are no cards at all
-            if (els.emptyState) {
-                if (cards.length === 0) {
-                    els.emptyState.style.display = '';
-                } else {
-                    els.emptyState.style.display = 'none';
-                }
+        els.pageNext.addEventListener('click', () => {
+            const totalPages = Math.max(1, Math.ceil(getFilteredHistory().length / PAGE_SIZE));
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderArchive();
             }
         });
 
